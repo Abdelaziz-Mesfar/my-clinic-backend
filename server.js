@@ -6,6 +6,7 @@ require('dotenv').config();
 const patientsRouter = require('./routes/patients')
 const app = express();
 
+app.use(express.json())
 app.use(cors({ credentials: true, origin: [process.env.WEB_APP_URL] }))
 
 app.get('/', (req, res) => {
@@ -14,20 +15,6 @@ app.get('/', (req, res) => {
 
 app.use('/patients', patientsRouter)
 
-
-const TECHNOLOGIES = [
-    {
-        _id:"1",
-        name: "React"
-    },
-    {
-        _id:"2",
-        name: "Node"
-    }
-]
-app.get('/technologies', (req,res) =>{
-    res.json(TECHNOLOGIES)
-} )
 
 const PORT = process.env.PORT || 7000;
 mongoose.connect(process.env.DB_CONNECTION, { useNewUrlParser: true })

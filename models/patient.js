@@ -1,3 +1,4 @@
+const { number } = require('joi');
 const mongoose = require('mongoose');
 
 const patientSchema = new mongoose.Schema({
@@ -9,9 +10,9 @@ const patientSchema = new mongoose.Schema({
         type: String,
         required: true
     },
-    phone: String,
-    age: String,
-    adresse: String
+    phone: Number,
+    age: Number,
+    adress: String
 })
 
 module.exports = mongoose.model('Patient', patientSchema)
