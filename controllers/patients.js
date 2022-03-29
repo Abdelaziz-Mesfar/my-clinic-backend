@@ -32,26 +32,42 @@ const updatePatient = async (req, res) => {
     const { id } = req.params
     const reqBody = req.body
     const validationResult = updatePatientValidator.validate(reqBody, { abortEarly: false })
-    if(validationResult.error){
+    if (validationResult.error) {
         return res.json(validationResult)
     }
     try {
-        const patient = await Patient.findOneAndUpdate({_id: id}, {$set: reqBody})
-        if (!patient){
-            return res.status(404).json({error : "patient not found"})
+        const patient = await Patient.findOneAndUpdate({ _id: id }, { $set: reqBody })
+        if (!patient) {
+            return res.status(404).json({ error: "patient not found" })
         }
         return res.json({
             message: "patient updated successfully",
             patient
         })
     } catch (error) {
-        res.status(500).json({error: error.message})
+        res.status(500).json({ error: error.message })
     }
-    
+
+}
+
+const deletePatient = async (req, res) => {
+    const { id } = req.params
+    try {
+        const patient = await Patient.findOneAndDelete({ _id: id })
+        if (!patient) {
+            return res.status(404).json({ error: "patient not found" })
+        }
+        return res.json({
+            message: "patient deleted successfully"
+        })
+    } catch (error) {
+        return res.json({ error: error.message })
+    }
 }
 
 module.exports = {
     getAllPatients,
     createPatient,
-    updatePatient
+    updatePatient,
+    deletePatient
 }
