@@ -65,9 +65,23 @@ const deletePatient = async (req, res) => {
     }
 }
 
+const getSinglePatient = async (req, res) => {
+    const { id } = req.params
+    try {
+        const patient = await Patient.findById(id)
+        if(!patient){
+            return res.status(404).json({error: "patient not found"})
+        }
+        return res.json(patient)
+    } catch (error) {
+        return res.status(500).json({error: error.message})
+    }
+}
+
 module.exports = {
     getAllPatients,
     createPatient,
     updatePatient,
-    deletePatient
+    deletePatient,
+    getSinglePatient
 }
