@@ -1,4 +1,3 @@
-const { number } = require('joi');
 const mongoose = require('mongoose');
 
 const patientSchema = new mongoose.Schema({
@@ -13,6 +12,8 @@ const patientSchema = new mongoose.Schema({
     phone: Number,
     age: Number,
     adress: String
+}, {
+    timestamps: true
 })
 
 module.exports = mongoose.model('Patient', patientSchema)

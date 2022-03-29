@@ -1,5 +1,5 @@
 const Patient = require('../models/patient');
-const { patientValidator } = require('../utilities/validators');
+const { patientValidator, updatePatientValidator } = require('../utilities/validators');
 
 const getAllPatients = async (req, res) => {
     try {
@@ -12,7 +12,7 @@ const getAllPatients = async (req, res) => {
 
 const createPatient = async (req, res) => {
     const reqBody = req.body
-    const validationResult = patientValidator.validate(reqBody, { abortEarly: true })
+    const validationResult = patientValidator.validate(reqBody, { abortEarly: false })
     if (validationResult.error) {
         return res.json({ validationResult })
     }
@@ -28,7 +28,30 @@ const createPatient = async (req, res) => {
     }
 }
 
+const updatePatient = async (req, res) => {
+    const { id } = req.params
+    const reqBody = req.body
+    const validationResult = updatePatientValidator.validate(reqBody, { abortEarly: false })
+    if(validationResult.error){
+        return res.json(validationResult)
+    }
+    try {
+        const patient = await Patient.findOneAndUpdate({_id: id}, {$set: reqBody})
+        if (!patient){
+            return res.status(404).json({error : "patient not found"})
+        }
+        return res.json({
+            message: "patient updated successfully",
+            patient
+        })
+    } catch (error) {
+        res.status(500).json({error: error.message})
+    }
+    
+}
+
 module.exports = {
     getAllPatients,
-    createPatient
+    createPatient,
+    updatePatient
 }

@@ -8,6 +8,16 @@ const patientValidator = Joi.object({
     adress: Joi.string()
 })
 
+const updatePatientValidator = Joi.object({
+    firstName: Joi.string(),
+    lastName: Joi.string(),
+    phone: Joi.number(),
+    age: Joi.number(),
+    adress: Joi.string()
+
+})
+
 module.exports = {
-    patientValidator
+    patientValidator,
+    updatePatientValidator
 }
