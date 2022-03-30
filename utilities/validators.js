@@ -14,10 +14,24 @@ const updatePatientValidator = Joi.object({
     phone: Joi.number(),
     age: Joi.number(),
     adress: Joi.string()
+    
+})
 
+const registerValidator = Joi.object({
+    firstName: Joi.string().required(),
+    lastName: Joi.string().required(),
+    email: Joi.string().email().required(),
+    password: Joi.string().required().min(8)
+})
+
+const loginValidator = Joi.object({
+    email: Joi.string().email().required(),
+    password: Joi.string().required()
 })
 
 module.exports = {
     patientValidator,
-    updatePatientValidator
+    updatePatientValidator,
+    registerValidator,
+    loginValidator
 }
