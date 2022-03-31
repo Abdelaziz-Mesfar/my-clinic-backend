@@ -1,4 +1,5 @@
 const bcrypt = require('bcryptjs')
+const jwt = require('jsonwebtoken')
 
 const User = require('../models/User')
 const { registerValidator, loginValidator } = require('../utilities/validators')
@@ -54,10 +55,11 @@ const loginUser = async (req, res) => {
             })
         }
         user.password = undefined
+        const token = jwt.sign({userId: user._id}, process.env.JWT_SECRET)
         res.json({
             message: `welcome Dr. ${user.firstName}`,
             user,
-            token: 'TOKKEN'
+            token
         })
     } catch (error) {
         res.status(500).json({ error: error.message })
