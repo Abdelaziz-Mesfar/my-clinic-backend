@@ -4,6 +4,7 @@ const cors = require('cors');
 require('dotenv').config();
 
 const patientsRouter = require('./routes/patients')
+const usersRouter = require('./routes/users')
 const app = express();
 
 app.use(express.json())
@@ -14,6 +15,7 @@ app.get('/', (req, res) => {
 })
 
 app.use('/patients', patientsRouter)
+app.use('/auth', usersRouter)
 
 
 const PORT = process.env.PORT || 7000;
