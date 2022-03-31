@@ -1,14 +1,14 @@
 const bcrypt = require('bcryptjs')
 
 const User = require('../models/User')
-const { registerValidator } = require('../utilities/validators')
+const { registerValidator, loginValidator } = require('../utilities/validators')
 
 const registerUser = async (req, res) => {
     try {
         const reqBody = req.body
         const validationResult = registerValidator.validate(reqBody, { abortEarly: false })
         if (validationResult.error) {
-            return res.status(404).json(validationResult)
+            return res.status(400).json(validationResult)
         }
         const { email, password } = req.body
         const existingUser = await User.findOne({ email })
@@ -29,10 +29,42 @@ const registerUser = async (req, res) => {
             user: createdUser
         })
     } catch (error) {
-        res.status(500).json({error: error.message})
+        res.status(500).json({ error: error.message })
+    }
+}
+
+const loginUser = async (req, res) => {
+    try {
+        const reqBody = req.body
+        const validationResult = loginValidator.validate(reqBody, { abortEarly: false })
+        if (validationResult.error) {
+            return res.status(400).json(validationResult)
+        }
+        const { email, password } = reqBody
+        const user = await User.findOne({ email })
+        if (!user) {
+            return res.status(401).json({
+                error: 'wrong email and/or password'
+            })
+        }
+        const matchedPassword = await bcrypt.compare(password, user.password)
+        if (!matchedPassword) {
+            return res.status(401).json({
+                error: 'wrong email and/or password'
+            })
+        }
+        user.password = undefined
+        res.json({
+            message: `welcome Dr. ${user.firstName}`,
+            user,
+            token: 'TOKKEN'
+        })
+    } catch (error) {
+        res.status(500).json({ error: error.message })
     }
 }
 
 module.exports = {
-    registerUser
+    registerUser,
+    loginUser
 }
