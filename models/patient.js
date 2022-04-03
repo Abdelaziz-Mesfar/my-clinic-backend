@@ -11,7 +11,11 @@ const patientSchema = new mongoose.Schema({
     },
     phone: Number,
     age: Number,
-    adress: String
+    adress: String,
+    user: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'User'
+    }
 }, {
     timestamps: true
 })

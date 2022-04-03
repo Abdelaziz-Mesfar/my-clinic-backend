@@ -3,7 +3,7 @@ const { patientValidator, updatePatientValidator } = require('../utilities/valid
 
 const getAllPatients = async (req, res) => {
     try {
-        const patients = await Patient.find()
+        const patients = await Patient.find({ user: req.user._id })
         res.status(200).json(patients)
     } catch (error) {
         res.status(500).json({ error: error.message })
@@ -11,13 +11,14 @@ const getAllPatients = async (req, res) => {
 }
 
 const createPatient = async (req, res) => {
+    console.log({ reqUser: req.user });
     const reqBody = req.body
     const validationResult = patientValidator.validate(reqBody, { abortEarly: false })
     if (validationResult.error) {
         return res.json({ validationResult })
     }
     try {
-        const patient = new Patient(reqBody)
+        const patient = new Patient({ ...reqBody, user: req.user._id })
         const savedPatient = await patient.save()
         res.status(201).json({
             message: "New patient created successfully",
@@ -36,7 +37,7 @@ const updatePatient = async (req, res) => {
         return res.json(validationResult)
     }
     try {
-        const patient = await Patient.findOneAndUpdate({ _id: id }, { $set: reqBody })
+        const patient = await Patient.findOneAndUpdate({ _id: id, user: req.user._id }, { $set: reqBody })
         if (!patient) {
             return res.status(404).json({ error: "patient not found" })
         }
@@ -53,7 +54,7 @@ const updatePatient = async (req, res) => {
 const deletePatient = async (req, res) => {
     const { id } = req.params
     try {
-        const patient = await Patient.findOneAndDelete({ _id: id })
+        const patient = await Patient.findOneAndDelete({ _id: id, user: req.user._id })
         if (!patient) {
             return res.status(404).json({ error: "patient not found" })
         }
@@ -68,13 +69,13 @@ const deletePatient = async (req, res) => {
 const getSinglePatient = async (req, res) => {
     const { id } = req.params
     try {
-        const patient = await Patient.findById(id)
-        if(!patient){
-            return res.status(404).json({error: "patient not found"})
+        const patient = await Patient.find({ _id: id, user: req.user._id })
+        if (!patient) {
+            return res.status(404).json({ error: "patient not found" })
         }
         return res.json(patient)
     } catch (error) {
-        return res.status(500).json({error: error.message})
+        return res.status(500).json({ error: error.message })
     }
 }
 
