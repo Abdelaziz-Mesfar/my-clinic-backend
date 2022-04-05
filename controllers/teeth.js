@@ -20,6 +20,24 @@ const addToothDescription = async (req, res) => {
     }
 }
 
+const deleteToothDescription = async (req, res) => {
+    const { id } = req.params
+    try {
+        const tooth = await Tooth.findOneAndDelete({ _id: id, user: req.user._id })
+        if (!tooth) {
+            return res.status(404).json({
+                message: 'tooth description not found'
+            })
+        }
+        return res.json({
+            message: 'description delete successfully'
+        })
+    } catch (error) {
+        res.status(500).json({ error: error.message })
+    }
+}
+
 module.exports = {
-    addToothDescription
+    addToothDescription,
+    deleteToothDescription
 }
