@@ -69,7 +69,7 @@ const deletePatient = async (req, res) => {
 const getSinglePatient = async (req, res) => {
     const { id } = req.params
     try {
-        const patient = await Patient.find({ _id: id, user: req.user._id })
+        const patient = await Patient.findOne({ _id: id, user: req.user._id })
         if (!patient) {
             return res.status(404).json({ error: "patient not found" })
         }
