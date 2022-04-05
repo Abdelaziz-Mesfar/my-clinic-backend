@@ -1,6 +1,15 @@
 const Tooth = require('../models/Tooth')
 const { toothValidator } = require('../utilities/validators')
 
+const getAllTeethOnePatientDescription = async (req, res) => {
+    try {
+        const tooth = await Tooth.find({ number: req.params.toothId, user: req.user._id })
+        res.status(200).json(tooth)
+    } catch (error) {
+        res.status(500).json({ error: error.message })
+    }
+}
+
 const addToothDescription = async (req, res) => {
     const reqBody = req.body
     const validationResult = toothValidator.validate(reqBody, { abortEarly: false })
@@ -39,5 +48,6 @@ const deleteToothDescription = async (req, res) => {
 
 module.exports = {
     addToothDescription,
-    deleteToothDescription
+    deleteToothDescription,
+    getAllTeethOnePatientDescription
 }
