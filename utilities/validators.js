@@ -29,9 +29,15 @@ const loginValidator = Joi.object({
     password: Joi.string().required()
 })
 
+const toothValidator = Joi.object({
+    number: Joi.string(),
+    description: Joi.string()
+})
+
 module.exports = {
     patientValidator,
     updatePatientValidator,
     registerValidator,
-    loginValidator
+    loginValidator,
+    toothValidator
 }

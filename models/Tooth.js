@@ -1,7 +1,7 @@
 const { Schema, model } = require('mongoose')
 
 const toothSchema = new Schema({
-    number: Number,
+    number: String,
     description: String,
     user: {
         type: Schema.Types.ObjectId,
