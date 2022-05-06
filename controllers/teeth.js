@@ -3,7 +3,7 @@ const { toothValidator } = require('../utilities/validators')
 
 const getAllTeethOnePatientDescription = async (req, res) => {
     try {
-        const tooth = await Tooth.find({ number: req.params.toothId, user: req.user._id })
+        const tooth = await Tooth.find({ number: req.params.toothId, user: req.user._id, patient: req.params.patientId })
         res.status(200).json(tooth)
     } catch (error) {
         res.status(500).json({ error: error.message })
@@ -18,7 +18,9 @@ const addToothDescription = async (req, res) => {
     }
     try {
         console.log({ reqParams: req.params });
-        const tooth = new Tooth({ ...reqBody, number: req.params.toothId, user: req.user._id })
+        // console.log({reqPatient: req.patient});
+        // console.log({reqUser: req.user});
+        const tooth = new Tooth({ ...reqBody, number: req.params.toothId, user: req.user._id, patient: req.params.patientId})
         const savedTooth = await tooth.save()
         res.json({
             message: 'description added successfully',
@@ -32,14 +34,14 @@ const addToothDescription = async (req, res) => {
 const deleteToothDescription = async (req, res) => {
     const { id } = req.params
     try {
-        const tooth = await Tooth.findOneAndDelete({ _id: id, user: req.user._id })
+        const tooth = await Tooth.findOneAndDelete({ _id: id, user: req.user._id, patient: req.params.patientId })
         if (!tooth) {
             return res.status(404).json({
                 message: 'tooth description not found'
             })
         }
         return res.json({
-            message: 'description delete successfully'
+            message: 'description deleted successfully'
         })
     } catch (error) {
         res.status(500).json({ error: error.message })
