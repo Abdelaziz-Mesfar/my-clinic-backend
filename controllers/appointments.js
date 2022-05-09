@@ -19,6 +19,16 @@ const createNewAppointment = async (req, res) => {
     }
 }
 
+const getAllAppointments = async (req, res) => {
+    try {
+        const appointments = await Appointment.find({ user: req.user._id })
+        res.status(200).json(appointments)
+    } catch (error) {
+        res.status(500).json({ error: error.message })
+    }
+}
+
 module.exports = {
-    createNewAppointment
+    createNewAppointment,
+    getAllAppointments
 }
