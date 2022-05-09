@@ -28,7 +28,17 @@ const getAllAppointments = async (req, res) => {
     }
 }
 
+const getSinglePatientAppointments = async (req, res) => {
+    try {
+        const appointments = await Appointment.find({ user: req.user._id, patient: req.params.patientId })
+        res.status(200).json(appointments)
+    } catch (error) {
+        res.status(500).json({ error: error.message })
+    }
+}
+
 module.exports = {
     createNewAppointment,
-    getAllAppointments
+    getAllAppointments,
+    getSinglePatientAppointments
 }
