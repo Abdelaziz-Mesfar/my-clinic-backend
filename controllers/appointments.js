@@ -37,8 +37,32 @@ const getSinglePatientAppointments = async (req, res) => {
     }
 }
 
+const updateAppointment = async (req, res) => {
+    const { id } = req.params
+    const reqBody = req.body
+    const validationResult = appointmentValidator.validate(reqBody, { abortEarly: false })
+    if (validationResult.error) {
+        return res.json({ validationResult })
+    }
+    try {
+        const appointment = await Appointment.findOneAndUpdate({ _id: id, user: req.user._id, patient: req.params.patientId }, { $set: reqBody })
+        if (!appointment) {
+            return res.status(404).json({
+                message: "Appointment not found"
+            })
+        }
+        return res.json({
+            message: "Appointment updated successfully",
+            appointment
+        })
+    } catch (error) {
+        res.status(500).json({ error: error.message })
+    }
+}
+
 module.exports = {
     createNewAppointment,
     getAllAppointments,
-    getSinglePatientAppointments
+    getSinglePatientAppointments,
+    updateAppointment
 }
