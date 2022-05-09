@@ -34,10 +34,16 @@ const toothValidator = Joi.object({
     description: Joi.string()
 })
 
+const appointmentValidator = Joi.object({
+    date: Joi.date().required(),
+    time: Joi.string().required()
+})
+
 module.exports = {
     patientValidator,
     updatePatientValidator,
     registerValidator,
     loginValidator,
-    toothValidator
+    toothValidator,
+    appointmentValidator
 }

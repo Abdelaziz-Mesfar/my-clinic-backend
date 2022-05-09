@@ -6,6 +6,7 @@ require('dotenv').config();
 const patientsRouter = require('./routes/patients')
 const usersRouter = require('./routes/users')
 const teethRouter = require('./routes/teeth')
+const appointmentRouter = require('./routes/appointments')
 
 const app = express();
 
@@ -19,6 +20,7 @@ app.get('/', (req, res) => {
 app.use('/patients', patientsRouter)
 app.use('/auth', usersRouter)
 app.use('/patient-tooth', teethRouter)
+app.use('/appointments', appointmentRouter)
 
 
 const PORT = process.env.PORT || 7000;
