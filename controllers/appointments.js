@@ -60,9 +60,27 @@ const updateAppointment = async (req, res) => {
     }
 }
 
+const deleteAppointment = async (req, res) => {
+    const { id } = req.params
+    try {
+        const appointment = await Appointment.findOneAndDelete({ _id: id, user: req.user._id, patient: req.params.patientId })
+        if (!appointment) {
+            return res.status(404).json({
+                message: "Appointment not found"
+            })
+        }
+        return res.json({
+            message: "Appointment deleted successfully"
+        })
+    } catch (error) {
+        res.status(500).json({ error: error.message })
+    }
+}
+
 module.exports = {
     createNewAppointment,
     getAllAppointments,
     getSinglePatientAppointments,
-    updateAppointment
+    updateAppointment,
+    deleteAppointment
 }
