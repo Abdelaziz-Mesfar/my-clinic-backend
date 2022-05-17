@@ -1,5 +1,5 @@
 const Appointment = require('../models/Appointment')
-const { appointmentValidator } = require('../utilities/validators')
+const { appointmentValidator, updateAppointmentValidator } = require('../utilities/validators')
 
 const createNewAppointment = async (req, res) => {
     const reqBody = req.body
@@ -40,7 +40,7 @@ const getSinglePatientAppointments = async (req, res) => {
 const updateAppointment = async (req, res) => {
     const { id } = req.params
     const reqBody = req.body
-    const validationResult = appointmentValidator.validate(reqBody, { abortEarly: false })
+    const validationResult = updateAppointmentValidator.validate(reqBody, { abortEarly: false })
     if (validationResult.error) {
         return res.json({ validationResult })
     }
