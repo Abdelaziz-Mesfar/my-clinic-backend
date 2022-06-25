@@ -1,3 +1,4 @@
+const { object } = require('joi')
 const { Schema, model } = require('mongoose')
 
 const appointmentSchema = new Schema({
@@ -22,6 +23,10 @@ const appointmentSchema = new Schema({
         type: Schema.Types.ObjectId,
         ref: 'Patient'
     }
+    // patient: {
+    //     type: Object,
+    //     ref: 'Patient'
+    // }
 })
 
 module.exports = model('Appointment', appointmentSchema)

@@ -1,4 +1,5 @@
 const Appointment = require('../models/Appointment')
+const Patient = require('../models/Patient')
 const { appointmentValidator, updateAppointmentValidator } = require('../utilities/validators')
 
 const createNewAppointment = async (req, res) => {
@@ -8,7 +9,8 @@ const createNewAppointment = async (req, res) => {
         return res.json({ validationResult })
     }
     try {
-        const appointment = new Appointment({ ...reqBody, user: req.user._id, patient: req.params.patientId })
+        // const patient = await Patient.find({_id: req.params.patientId, user: req.user._id})
+        const appointment = new Appointment({ ...reqBody, user: req.user._id, /*patient: patient*/ patient: req.params.patientId })
         const savedAppointment = await appointment.save()
         res.status(201).json({
             message: "A new appointment created successfully",
@@ -45,7 +47,7 @@ const updateAppointment = async (req, res) => {
         return res.json({ validationResult })
     }
     try {
-        const appointment = await Appointment.findOneAndUpdate({ _id: id, user: req.user._id, patient: req.params.patientId }, { $set: reqBody })
+        const appointment = await Appointment.findOneAndUpdate({ _id: id, user: req.user._id }, { $set: reqBody })
         if (!appointment) {
             return res.status(404).json({
                 message: "Appointment not found"
@@ -63,7 +65,7 @@ const updateAppointment = async (req, res) => {
 const deleteAppointment = async (req, res) => {
     const { id } = req.params
     try {
-        const appointment = await Appointment.findOneAndDelete({ _id: id, user: req.user._id, patient: req.params.patientId })
+        const appointment = await Appointment.findOneAndDelete({ _id: id, user: req.user._id})
         if (!appointment) {
             return res.status(404).json({
                 message: "Appointment not found"
@@ -77,10 +79,24 @@ const deleteAppointment = async (req, res) => {
     }
 }
 
+const getSingleAppointment = async (req, res) => {
+    const { id } = req.params
+    try {
+        const appointment = await Appointment.findOne({ _id: id, user: req.user._id })
+        if (!appointment) {
+            return res.status(404).json({ message: "Appointment not found" })
+        }
+        return res.json(appointment)
+    } catch (error) {
+        res.status(500).json({ error: error.message })
+    }
+}
+
 module.exports = {
     createNewAppointment,
     getAllAppointments,
     getSinglePatientAppointments,
     updateAppointment,
-    deleteAppointment
+    deleteAppointment,
+    getSingleAppointment
 }
