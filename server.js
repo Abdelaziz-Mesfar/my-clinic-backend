@@ -11,7 +11,7 @@ const appointmentRouter = require('./routes/appointments')
 const app = express();
 
 app.use(express.json())
-app.use(cors({ credentials: true, origin: [process.env.WEB_APP_URL] }))
+app.use(cors())
 
 app.get('/', (req, res) => {
     res.json('welcome to my clinic api')
