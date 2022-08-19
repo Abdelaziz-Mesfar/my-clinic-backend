@@ -1,4 +1,4 @@
-const Patient = require('../models/Patient');
+const Patient = require('../models');
 const { patientValidator, updatePatientValidator } = require('../utilities/validators');
 
 const getAllPatients = async (req, res) => {
