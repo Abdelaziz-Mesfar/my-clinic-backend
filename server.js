@@ -23,12 +23,12 @@ app.use('/patient-tooth', teethRouter)
 app.use('/appointments', appointmentRouter)
 
 
-const PORT = process.env.PORT || 7000;
+// const PORT = process.env.PORT || 7000;
 mongoose.connect(process.env.DB_CONNECTION, { useNewUrlParser: true })
     .then(() => {
         console.log('successfully connected to mongodBD');
-        app.listen(PORT, () => {
-            console.log(`the port is listening on port ${PORT}`);
+        app.listen(process.env.PORT || 7000, () => {
+            console.log(`the port is listening on port ${process.env.PORT}`);
         })
     })
     .catch(error => {
