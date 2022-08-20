@@ -1,5 +1,5 @@
 const Appointment = require('../models/Appointment')
-const Patient = require('../models/Patient')
+// const Patient = require('../models/Patient')
 const { appointmentValidator, updateAppointmentValidator } = require('../utilities/validators')
 
 const createNewAppointment = async (req, res) => {

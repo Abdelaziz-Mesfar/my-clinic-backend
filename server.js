@@ -17,7 +17,7 @@ app.get('/', (req, res) => {
     res.json('welcome to my clinic api')
 })
 
-app.use('/patients', patientsRouter)
+// app.use('/patients', patientsRouter)
 app.use('/auth', usersRouter)
 app.use('/patient-tooth', teethRouter)
 app.use('/appointments', appointmentRouter)
