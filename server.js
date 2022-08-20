@@ -27,7 +27,7 @@ app.use('/appointments', appointmentRouter)
 mongoose.connect(process.env.DB_CONNECTION, { useNewUrlParser: true })
     .then(() => {
         console.log('successfully connected to mongodBD');
-        app.listen(process.env.PORT || 7000, () => {
+        app.listen(() => {
             console.log(`the port is listening on port ${process.env.PORT}`);
         })
     })
